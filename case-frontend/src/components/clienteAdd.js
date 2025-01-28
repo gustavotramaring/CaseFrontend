@@ -1,18 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
+import { useState } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 export default function ClientManager() {
-  const [clientes, setClientes] = useState([]);
   const [formData, setFormData] = useState({
     nome: "",
     email: "",
     status: true,
   });
-  const [loading, setLoading] = useState(false);
 
   // Função para criar um novo cliente
   const handleSubmit = async (e) => {
@@ -26,8 +24,16 @@ export default function ClientManager() {
         body: JSON.stringify(formData),
       });
 
+      const data = await response.json(); // Lê a resposta do backend
+
       if (!response.ok) {
-        throw new Error("Erro ao criar cliente.");
+        // Checa se o erro é de email duplicado
+        if (data.error === "Email já cadastrado a um cliente.") {
+          alert(data.error); // Alerta específico
+        } else {
+          throw new Error(data.error || "Erro ao criar cliente.");
+        }
+        return;
       }
 
       alert("Cliente cadastrado com sucesso!");
@@ -35,7 +41,7 @@ export default function ClientManager() {
       location.reload();
     } catch (error) {
       console.error(error);
-      alert("Erro ao cadastrar cliente. Tente novamente.");
+      alert(error.message || "Erro ao cadastrar cliente. Tente novamente.");
     }
   };
 
@@ -104,7 +110,6 @@ export default function ClientManager() {
           </form>
         </CardContent>
       </Card>
-
     </div>
   );
 }
