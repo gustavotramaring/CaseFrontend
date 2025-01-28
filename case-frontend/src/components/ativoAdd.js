@@ -55,7 +55,7 @@ export default function Ativos() {
         body: JSON.stringify({
           nome,
           valor: parseFloat(valor), // Garantir que o valor seja enviado como número
-          clienteId: clienteId || null, // Enviar null se clienteId estiver vazio
+          clienteId: clienteId ? parseInt(clienteId, 10) : null, // Enviar null se clienteId estiver vazio
         }),
       });
 
@@ -64,7 +64,7 @@ export default function Ativos() {
         setNome("");
         setValor("");
         setClienteId("");
-        fetchAtivos(); // Atualizar lista de ativos
+        location.reload();
       } else {
         alert("Erro ao criar ativo. Tente novamente.");
       }

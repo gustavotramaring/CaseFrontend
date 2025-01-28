@@ -1,12 +1,13 @@
 "use client";
 
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation"; // Adicionando o roteamento
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 export default function ClienteList() {
+  const router = useRouter(); // Hook do Next.js para navegação
   const [clientes, setClientes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editCliente, setEditCliente] = useState(null); // ID do cliente sendo editado
@@ -88,6 +89,27 @@ export default function ClienteList() {
     setFormData({ nome: "", email: "", status: false });
   };
 
+  const handleRemove = async (id) => {
+    const confirmDelete = window.confirm("Tem certeza que deseja remover este cliente?");
+    if (!confirmDelete) return;
+
+    try {
+      const response = await fetch(`http://localhost:3000/clientes/${id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        alert("Cliente removido com sucesso!");
+        setClientes(clientes.filter((cliente) => cliente.id !== id));
+      } else {
+        throw new Error("Erro ao remover cliente.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao remover cliente. Tente novamente.");
+    }
+  };
+
   return (
     <div>
       <Card className="w-full max-w-5xl shadow-xl">
@@ -166,25 +188,21 @@ export default function ClienteList() {
                             >
                               Editar
                             </Button>
+                            <Button
+                              className="bg-red-500 hover:bg-red-600"
+                              onClick={() => handleRemove(cliente.id)}
+                            >
+                              Remover
+                            </Button>
+                            <Button
+                              className="bg-gray-500 hover:bg-gray-600 mt-2"
+                              onClick={() => router.push(`/clientes/${cliente.id}`)} // Ajuste aqui
+                            >
+                              Ver Ativos
+                            </Button>
                           </td>
                         </>
                       )}
-                    </tr>
-                    <tr>
-                      <td colSpan="4" className="border border-gray-300 px-4 py-2 bg-gray-50">
-                        <strong>Ativos:</strong>
-                        {cliente.ativos.length > 0 ? (
-                          <ul className="list-disc pl-4 mt-2">
-                            {cliente.ativos.map((ativo) => (
-                              <li key={ativo.id}>
-                                {ativo.nome} - R${ativo.valor.toFixed(2).replace(".", ",")}
-                              </li>
-                            ))}
-                          </ul>
-                        ) : (
-                          <span className="text-gray-500">Sem ativos</span>
-                        )}
-                      </td>
                     </tr>
                   </React.Fragment>
                 ))}

@@ -32,7 +32,7 @@ export default function ClientManager() {
 
       alert("Cliente cadastrado com sucesso!");
       setFormData({ nome: "", email: "", status: true });
-      fetchClientes(); // Atualiza a lista de clientes
+      location.reload();
     } catch (error) {
       console.error(error);
       alert("Erro ao cadastrar cliente. Tente novamente.");
