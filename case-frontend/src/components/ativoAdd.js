@@ -10,6 +10,7 @@ export default function Ativos() {
   const [loadingAtivos, setLoadingAtivos] = useState(true);
   const [nome, setNome] = useState("");
   const [valor, setValor] = useState("");
+  const [rentabilidade, setRentabilidade] = useState("");
   const [clienteId, setClienteId] = useState("");
   const [loadingSubmit, setLoadingSubmit] = useState(false);
 
@@ -39,8 +40,8 @@ export default function Ativos() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!nome || !valor) {
-      alert("Por favor, preencha os campos obrigatórios.");
+    if (!nome || !valor || !rentabilidade) {
+      alert("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
 
@@ -54,8 +55,9 @@ export default function Ativos() {
         },
         body: JSON.stringify({
           nome,
-          valor: parseFloat(valor), // Garantir que o valor seja enviado como número
-          clienteId: clienteId ? parseInt(clienteId, 10) : null, // Enviar null se clienteId estiver vazio
+          valor: parseFloat(valor),
+          rentabilidade: parseFloat(rentabilidade),
+          clienteId: clienteId ? parseInt(clienteId, 10) : null,
         }),
       });
 
@@ -63,6 +65,7 @@ export default function Ativos() {
         alert("Ativo criado com sucesso!");
         setNome("");
         setValor("");
+        setRentabilidade("");
         setClienteId("");
         location.reload();
       } else {
@@ -106,6 +109,15 @@ export default function Ativos() {
             <div>
               <Input
                 type="number"
+                name="rentabilidade"
+                placeholder="Rentabilidade (%)"
+                value={rentabilidade}
+                onChange={(e) => setRentabilidade(e.target.value)}
+              />
+            </div>
+            <div>
+              <Input
+                type="number"
                 name="clienteId"
                 placeholder="ID do Cliente (opcional)"
                 value={clienteId}
@@ -123,7 +135,7 @@ export default function Ativos() {
             </div>
           </form>
         </CardContent>
-      </Card> 
+      </Card>
     </div>
   );
 }

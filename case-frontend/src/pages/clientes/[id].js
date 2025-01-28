@@ -54,6 +54,7 @@ export default function ClienteAtivos() {
                   <tr className="bg-gray-200">
                     <th className="border border-gray-300 px-4 py-2 text-left">Nome</th>
                     <th className="border border-gray-300 px-4 py-2 text-left">Valor</th>
+                    <th className="border border-gray-300 px-4 py-2 text-left">Rentabilidade (12M)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -63,12 +64,15 @@ export default function ClienteAtivos() {
                       <td className="border border-gray-300 px-4 py-2">
                         R$ {ativo.valor.toFixed(2).replace(".", ",")}
                       </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {ativo.rentabilidade?.toFixed(2).replace(".", ",") ?? "N/A"}%
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
               <p className="mt-4 font-bold">
-                Valor Total: R$ {valorTotal.toFixed(2).replace(".", ",")}
+                Valor Total em ativos: R$ {valorTotal.toFixed(2).replace(".", ",")}
               </p>
             </div>
           ) : (

@@ -43,6 +43,7 @@ export default function AtivoList() {
               <tr className="bg-gray-200">
                 <th className="border border-gray-300 px-4 py-2 text-left">Nome</th>
                 <th className="border border-gray-300 px-4 py-2 text-left">Valor</th>
+                <th className="border border-gray-300 px-4 py-2 text-left">Rentabilidade (12M)</th>
               </tr>
             </thead>
             <tbody>
@@ -50,7 +51,11 @@ export default function AtivoList() {
                 <tr key={ativo.id} className="hover:bg-gray-100">
                   <td className="border border-gray-300 px-4 py-2">{ativo.nome}</td>
                   <td className="border border-gray-300 px-4 py-2">
-                  R$ {ativo.valor.toFixed(2).replace(".", ",")} </td>
+                    R$ {ativo.valor.toFixed(2).replace(".", ",")}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {ativo.rentabilidade?.toFixed(2).replace(".", ",") ?? "N/A"}%
+                  </td>
                 </tr>
               ))}
             </tbody>
